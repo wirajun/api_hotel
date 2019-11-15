@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 11, 2019 at 02:49 AM
+-- Generation Time: Nov 15, 2019 at 01:06 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -200,19 +200,23 @@ INSERT INTO `hotel` (`nama`, `alamat`, `harga`, `bintang`, `kodeprop`, `id`) VAL
 --
 
 CREATE TABLE `user` (
-  `id_user` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `firstname` varchar(50) NOT NULL,
+  `lastname` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `lastlogin` datetime DEFAULT NULL
+  `password` varchar(2048) NOT NULL,
+  `token` varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `username`, `email`, `password`, `lastlogin`) VALUES
-(1, 'admin', 'admin@gmail.com', '123456', NULL);
+INSERT INTO `user` (`id`, `firstname`, `lastname`, `email`, `password`, `token`) VALUES
+(1, 'admin', 'admin', 'admin@gmail.com', '123456', NULL),
+(4, 'wira', 'Jun', 'wirajun@gmail.com', '$2y$10$X68PSsf/Fj1ksBkTXx3ga.meOiWdIY4Y.VbHESys40hfOHkW9ZYHq', '5a9c058c4c5f107bd46b3d76b2ba2105'),
+(5, 'aman', 'amin', 'aman@gmail.com', '$2y$10$Y4sqW62jPz.vjn2OAtLky.xrAx4zu.0djsZ85lUccAQ53kG2JbEJm', '2bf2e089898743beb3aa3a88f0a08a82'),
+(8, 'a', 'a', 'admin@gmail.net', '$2y$10$5dPyByHV7xExeGC8H9sr9eeWElP8GD65mKrafgfRiYUeFNlwVYsZK', 'ce8ccbcdab13327f11da098d3b7f7d6c');
 
 -- --------------------------------------------------------
 
@@ -279,7 +283,7 @@ ALTER TABLE `hotel`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `wilayah`
@@ -301,7 +305,7 @@ ALTER TABLE `hotel`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
