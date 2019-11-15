@@ -6,5 +6,5 @@ versi 1.0.1
 --------------------------------------------
 
 versi 1.1.0
-5. penambahan token/API key untuk mengakses data
-6. sign up user untuk mendaparkan token
+5. penambahan token/API key untuk mengakses data menggunakan library JWT (JSON Web Token)
+6. menu sign up user untuk mendapatkan token
