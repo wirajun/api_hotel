@@ -5,67 +5,76 @@
 
   include_once '../../config/Database.php';
   include_once '../../models/Hotel.php';
+  include_once '../../models/User.php';
 
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();
 
-  // Instantiate blog hotel object
-  $hotel = new Hotel($db);
+  $token = isset($_GET['token']) ? $_GET['token'] : error();
 
-  // Get ID
-  $hotel->kodeprop = isset($_GET['kodeprop']) ? $_GET['kodeprop'] : die();
+  $user = new User($db);
+  $user->token = $token;
+  $token_exists = $user->tokenExists();
 
-  // Get hotel
-  $result = $hotel->read_prop();
-  //$hotel->read_prop();
-  
-  $num = $result->rowCount();
+  if($token_exists){
+    // Instantiate blog hotel object
+    $hotel = new Hotel($db);
 
-  // Check if any hotels
-  if($num > 0) {
-    // hotel array
-    $hotels_arr = array();
-    // $hotels_arr['data'] = array();
+    // Get ID
+    $hotel->kodeprop = isset($_GET['kodeprop']) ? $_GET['kodeprop'] : die();
 
-    while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-      extract($row);
+    // Get hotel
+    $result = $hotel->read_prop();
+    $num = $result->rowCount();
 
-      $hotel_item = array(
-        'id' => $id,
-        'nama' => $nama,
-		'alamat' => $alamat,
-        'harga' => $harga,
-        'bintang' => $bintang,
-        'kodeprop' => $kodeprop,        
+    // Check if any hotels
+    if($num > 0) {
+      // hotel array
+      $hotels_arr = array();
+      // $hotels_arr['data'] = array();
+
+      while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        extract($row);
+
+        $hotel_item = array(
+          'id' => $id,
+          'nama' => $nama,
+		  'alamat' => $alamat,
+          'harga' => $harga,
+          'bintang' => $bintang,
+          'kodeprop' => $kodeprop,        
+        );
+
+        // Push to "data"
+        array_push($hotels_arr, $hotel_item);
+        // array_push($hotels_arr['data'], $hotel_item);
+      }
+
+      // Turn to JSON & output
+      echo json_encode($hotels_arr);
+
+    } else {
+      // No hotels
+      echo json_encode(
+       array('message' => 'No hotels Found')
       );
-
-      // Push to "data"
-      array_push($hotels_arr, $hotel_item);
-      // array_push($hotels_arr['data'], $hotel_item);
     }
-
-    // Turn to JSON & output
-    echo json_encode($hotels_arr);
-
-  } else {
-    // No hotels
-    echo json_encode(
-      array('message' => 'No hotels Found')
-    );
+  }  
+  else{
+    // set response code
+     http_response_code(401);
+     
+    // tell the client access denied  & show error message
+    echo json_encode(array("message" => "Token is not Registered."));
+    }
+    
+  function error(){
+    // set response code
+    http_response_code(401);
+     
+    // tell the client access denied  & show error message
+    echo json_encode(array("message" => "Access Denied."));
+    die();
   }
-
-  /*
-  // Create array
-  $hotel_arr = array(
-		'id' => $id,
-        'nama' => $nama,
-		'alamat' => $alamat,
-        'harga' => $harga,
-        'bintang' => $bintang,
-        'kodeprop' => $kodeprop,
-  );
-  */
-
-  // Make JSON
-  //print_r(json_encode($hotel_arr));
+?>
